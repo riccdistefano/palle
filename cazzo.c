@@ -2,6 +2,8 @@
 
 int main()
 {
-    printf("ho sburato\n");
+    char text[100];
+    scanf("%s", text);
+    printf("%s\n", text);
     return 0;
 }
