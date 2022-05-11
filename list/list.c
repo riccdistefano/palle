@@ -23,6 +23,9 @@ void remove2(dyn_arr *arr, float element)
 
 void remove_at(dyn_arr *arr, int pos)
 {
+    if (pos < 0 || pos > arr->length)
+        return;
+
     for (int i = pos; i < arr->length - 1; i++)
     {
         set(arr, arr->elements[i + 1], i);
@@ -34,10 +37,18 @@ void insert(dyn_arr *arr, float element, int pos)
 {
     if (arr->length == arr->capacity)
     {
-        const int new_capacity = arr->capacity * 2;
+        // Round to the next power of 2
+        int new_capacity = arr->capacity;
+        new_capacity |= new_capacity >> 1;
+        new_capacity |= new_capacity >> 2;
+        new_capacity |= new_capacity >> 4;
+        new_capacity |= new_capacity >> 8;
+        new_capacity |= new_capacity >> 16;
+        new_capacity++;
+
         set_capacity(arr, new_capacity);
     }
-    for (int i = arr->length; i > pos; i--)
+    for (int i = arr->length; i > pos; i--) // go get some bitches
     {
         set(arr, arr->elements[i - 1], i);
     }
@@ -68,11 +79,17 @@ void set_capacity(dyn_arr *arr, int capacity)
 
 void set(dyn_arr *arr, float element, int pos)
 {
+    if (pos < 0 || pos > arr->length)
+        return;
+
     arr->elements[pos] = element;
 }
 
 float get(dyn_arr *arr, int pos)
 {
+    if(pos < 0 || pos > arr->length)
+        return 0;
+        
     return arr->elements[pos];
 }
 

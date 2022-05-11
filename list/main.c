@@ -19,48 +19,45 @@ Get             //Gets an element
 Find            //Returns the index of the specific element
 */
 
-void dobug(dyn_arr *arr)
+void print(dyn_arr *arr)
 {
-    printf("Elements: %d\nSize: %d\nCapacity: %d\n", lenght(arr), arr->size, arr->capacity);
-    for (int i = 0; i < lenght(arr); i++)
+    printf("Lenght: %d Capacity: %d\n", arr->length, arr->capacity);
+    for (int i = 0; i < arr->length; i++)
     {
-        printf("Pos: %d Value: %f\n", i, get(arr, i));
+        printf("Pos: %d Value: %f\n", i, arr->elements[i]);
     }
-    return;
 }
 
 int main()
 {
-    dyn_arr arr1 = create();
+    dyn_arr arr = create();
 
-    printf("add\n");
-    for (int i = 0; i < 5; i++)
+    add(&arr, 4.3f);
+    add(&arr, 12.5f);
+    add(&arr, 9.1f);
+    print(&arr);
+
+    remove2(&arr, 12.5f);
+    print(&arr);
+
+    trim(&arr);
+    print(&arr);
+
+    add(&arr, 7.1f);
+    print(&arr);
+
+    clear(&arr);
+    trim(&arr);
+    print(&arr);
+
+    for (int i = 0; i < 10; i++)
     {
-        add(&arr1, (float)i);
+        add(&arr, (float)i);
     }
-    dobug(&arr1);
+    print(&arr);
 
-    printf("insert\n");
-    insert(&arr1, 43, 2);
-    dobug(&arr1);
+    printf("Index: %f\n", get(&arr, find(&arr, 11.0f)));
 
-    printf("set\n");
-    set(&arr1, 51, 1);
-    dobug(&arr1);
-
-    printf("find\n");
-    printf("Pos: %d Num: 51\n", find(&arr1, 51));
-
-    printf("removeat\n");
-    remove_at(&arr1, 3);
-    dobug(&arr1);
-
-    printf("remove\n");
-    remove2(&arr1, 10);
-    dobug(&arr1);
-
-    printf("clear\n");
-    clear(&arr1);
-    dobug(&arr1);
+    remove_at(&arr, -23174291);
     return 0;
 }
