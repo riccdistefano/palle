@@ -3,101 +3,87 @@
 
 dyn_arr create()
 {
+    const int base_capacity = 8;
     dyn_arr arr;
-    arr.elements = malloc(sizeof(*arr.elements));
-    arr.size = 1;
-    arr.capacity = 1;
+    arr.length = 0;
+    arr.capacity = base_capacity;
+    arr.elements = malloc(sizeof(*arr.elements) * base_capacity);
     return arr;
 }
 
 void add(dyn_arr *arr, float element)
 {
-    insert(arr, element, lenght(arr));
-    return;
+    insert(arr, element, arr->length);
 }
 
 void remove2(dyn_arr *arr, float element)
 {
     remove_at(arr, find(arr, element));
-    return;
 }
 
 void remove_at(dyn_arr *arr, int pos)
 {
-    for (int i = pos; i < lenght(arr); i++)
+    for (int i = pos; i < arr->length - 1; i++)
     {
-        set(arr, *(arr->elements + i + 1), i);
+        set(arr, arr->elements[i + 1], i);
     }
-    arr->capacity++;
-    trim(arr);
-    return;
+    arr->length--;
 }
 
 void insert(dyn_arr *arr, float element, int pos)
 {
-    const int increase = 1;       // if you want to increase more than one element at time
-    if (lenght(arr) == arr->size)
+    if (arr->length == arr->capacity)
     {
-        set_capacity(arr, arr->size + increase);
+        const int new_capacity = arr->capacity * 2;
+        set_capacity(arr, new_capacity);
     }
-    for (int i = lenght(arr); i > pos; i--)
+    for (int i = arr->length; i > pos; i--)
     {
-        set(arr, *(arr->elements + i - 1), i);
+        set(arr, arr->elements[i - 1], i);
     }
     set(arr, element, pos);
-    arr->capacity--;
-    return;
+    arr->length++;
 }
 
 void clear(dyn_arr *arr)
 {
-    set_capacity(arr, 1);
-    arr->size = 1;
-    arr->capacity = 1;
-    return;
+    set_capacity(arr, 8);
+    arr->length = 0;
 }
 
 void trim(dyn_arr *arr)
 {
-    set_capacity(arr, arr->size - arr->capacity);
-    return;
+    set_capacity(arr, arr->length);
 }
 
 void set_capacity(dyn_arr *arr, int capacity)
 {
-    arr->elements = realloc(arr->elements, sizeof(*arr->elements) * capacity);
-    arr->capacity = capacity - lenght(arr);
-    arr->size = capacity;
-    
-}
-
-int lenght(dyn_arr *arr)
-{
-    return arr->size - arr->capacity;
+    arr->elements = realloc(arr->elements, sizeof(float) * capacity);
+    arr->capacity = capacity;
+    if (arr->length > capacity)
+    {
+        arr->length = capacity;
+    }
 }
 
 void set(dyn_arr *arr, float element, int pos)
 {
-    *(arr->elements + pos) = element;
-    return;
+    arr->elements[pos] = element;
 }
 
 float get(dyn_arr *arr, int pos)
 {
-    return *(arr->elements + pos);
+    return arr->elements[pos];
 }
 
-/*
-bugs: if nothing is found it returns 0, if function like detete use this function and the element is not in the array it will delete the first value 0
-*/
 int find(dyn_arr *arr, float element)
 {
-    for (int i = 0; i < lenght(arr); i++)
+    for (int i = 0; i < arr->length; i++)
     {
-        if (*(arr->elements + i) == element)
+        if (arr->elements[i] == element)
         {
             return i;
         }
     }
-    return 0;
+    return -1;
 }
